@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Wellbeing Score Calculator — Recep Zerk</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f5f2ed;
+    --surface: #ffffff;
+    --dark: #1a1814;
+    --mid: #5a5650;
+    --light: #9a9590;
+    --border: #e0dcd5;
+    --accent: #2d4a3e;
+    --accent-light: #e8f0ec;
+    --warn: #8b3a2a;
+    --warn-light: #f5ebe8;
+    --neutral: #4a5568;
+    --neutral-light: #eef0f3;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--dark);
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  header {
+    background: var(--dark);
+    color: white;
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+  }
+
+  header .label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 1rem;
+  }
+
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(26px, 5vw, 42px);
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 0.75rem;
+  }
+
+  header p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+  }
+
+  .intro-note {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    font-size: 13px;
+    color: var(--mid);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+
+  .intro-note strong {
+    color: var(--dark);
+    font-weight: 500;
+  }
+
+  .dimension {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.75rem;
+    margin-bottom: 1.25rem;
+    transition: border-color 0.2s;
+  }
+
+  .dimension:focus-within {
+    border-color: var(--accent);
+  }
+
+  .dim-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+  }
+
+  .dim-number {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--light);
+    margin-bottom: 0.25rem;
+  }
+
+  .dim-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .dim-desc {
+    font-size: 12.5px;
+    color: var(--mid);
+    line-height: 1.55;
+    margin-bottom: 1.25rem;
+  }
+
+  .score-display {
+    font-family: 'DM Serif Display', serif;
+    font-size: 32px;
+    color: var(--accent);
+    min-width: 48px;
+    text-align: right;
+    line-height: 1;
+  }
+
+  .slider-wrap {
+    position: relative;
+  }
+
+  .slider-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--light);
+    margin-bottom: 0.4rem;
+  }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--border);
+    outline: none;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--dark);
+    cursor: pointer;
+    border: 3px solid white;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    transition: transform 0.15s;
+  }
+
+  input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--dark);
+    cursor: pointer;
+    border: 3px solid white;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  }
+
+  .hint-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--light);
+    margin-top: 0.5rem;
+    line-height: 1.4;
+  }
+
+  .hint-row span {
+    max-width: 45%;
+  }
+
+  .hint-row span:last-child {
+    text-align: right;
+  }
+
+  /* Result card */
+  .result-card {
+    background: var(--dark);
+    color: white;
+    border-radius: 10px;
+    padding: 2.5rem 2rem;
+    margin-top: 2rem;
+    text-align: center;
+    display: none;
+  }
+
+  .result-card.visible {
+    display: block;
+    animation: fadeUp 0.4s ease;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .result-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 0.75rem;
+  }
+
+  .result-score {
+    font-family: 'DM Serif Display', serif;
+    font-size: 72px;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .result-max {
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 1.5rem;
+  }
+
+  .result-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    margin-bottom: 0.75rem;
+  }
+
+  .result-desc {
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.65;
+    max-width: 480px;
+    margin: 0 auto 1.75rem;
+  }
+
+  .dim-breakdown {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .dim-pill {
+    text-align: center;
+  }
+
+  .dim-pill .pill-score {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    margin-bottom: 0.25rem;
+  }
+
+  .dim-pill .pill-name {
+    font-size: 9px;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    line-height: 1.3;
+  }
+
+  .calculate-btn {
+    display: block;
+    width: 100%;
+    padding: 1rem;
+    background: var(--dark);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    margin-top: 1.5rem;
+    transition: opacity 0.2s;
+  }
+
+  .calculate-btn:hover { opacity: 0.85; }
+
+  .reset-btn {
+    display: block;
+    width: 100%;
+    padding: 0.75rem;
+    background: transparent;
+    color: rgba(255,255,255,0.5);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    margin-top: 0.75rem;
+    transition: all 0.2s;
+  }
+
+  .reset-btn:hover {
+    background: rgba(255,255,255,0.05);
+    color: white;
+  }
+
+  .footer-note {
+    text-align: center;
+    font-size: 12px;
+    color: var(--light);
+    margin-top: 2.5rem;
+    line-height: 1.6;
+  }
+
+  .footer-note a {
+    color: var(--mid);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  @media (max-width: 480px) {
+    .dim-breakdown { grid-template-columns: repeat(3, 1fr); }
+    .result-score { font-size: 56px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="label">Research Tool · Recep Zerk</p>
+  <h1>Digital Wellbeing<br>Score Calculator</h1>
+  <p>Based on the Digital Wellbeing Index framework. Rate yourself across five dimensions to understand your relationship with digital environments.</p>
+</header>
+
+<div class="container">
+
+  <div class="intro-note">
+    <strong>How to use:</strong> Move each slider to reflect your honest experience. A score of 1 means the low-functioning pattern is consistently true for you. A score of 5 means it rarely or never applies. There are no right answers — only honest ones.
+  </div>
+
+  <!-- Dimension 1 -->
+  <div class="dimension">
+    <div class="dim-header">
+      <div>
+        <div class="dim-number">Dimension 1</div>
+        <div class="dim-title">Screen Quality</div>
+      </div>
+      <div class="score-display" id="score-display-1">3</div>
+    </div>
+    <p class="dim-desc">How intentional is your time online? This dimension looks at the ratio of passive consumption to active, meaningful engagement.</p>
+    <div class="slider-wrap">
+      <div class="slider-labels"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+      <input type="range" min="1" max="5" value="3" step="1" id="slider-1" oninput="updateScore(1, this.value)">
+      <div class="hint-row">
+        <span>Most time is passive scrolling with no clear purpose</span>
+        <span>Most time is intentional, chosen, and meaningful</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dimension 2 -->
+  <div class="dimension">
+    <div class="dim-header">
+      <div>
+        <div class="dim-number">Dimension 2</div>
+        <div class="dim-title">Algorithmic Dependency</div>
+      </div>
+      <div class="score-display" id="score-display-2">3</div>
+    </div>
+    <p class="dim-desc">Can you navigate digital environments without algorithmic guidance? This dimension measures your capacity for self-directed content choices.</p>
+    <div class="slider-wrap">
+      <div class="slider-labels"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+      <input type="range" min="1" max="5" value="3" step="1" id="slider-2" oninput="updateScore(2, this.value)">
+      <div class="hint-row">
+        <span>Feels anxious or lost when the feed doesn't feel right</span>
+        <span>Comfortable choosing content without algorithmic prompting</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dimension 3 -->
+  <div class="dimension">
+    <div class="dim-header">
+      <div>
+        <div class="dim-number">Dimension 3</div>
+        <div class="dim-title">Identity Coherence</div>
+      </div>
+      <div class="score-display" id="score-display-3">3</div>
+    </div>
+    <p class="dim-desc">How aligned are your online and offline selves? This dimension looks at the gap between how you present yourself and how you privately experience yourself.</p>
+    <div class="slider-wrap">
+      <div class="slider-labels"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+      <input type="range" min="1" max="5" value="3" step="1" id="slider-3" oninput="updateScore(3, this.value)">
+      <div class="hint-row">
+        <span>Online persona requires significant effort to maintain</span>
+        <span>Online and offline behavior feel largely consistent</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dimension 4 -->
+  <div class="dimension">
+    <div class="dim-header">
+      <div>
+        <div class="dim-number">Dimension 4</div>
+        <div class="dim-title">Social Comparison Load</div>
+      </div>
+      <div class="score-display" id="score-display-4">3</div>
+    </div>
+    <p class="dim-desc">How often does others' content trigger self-evaluation? This dimension measures the frequency and intensity of upward social comparisons online.</p>
+    <div class="slider-wrap">
+      <div class="slider-labels"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+      <input type="range" min="1" max="5" value="3" step="1" id="slider-4" oninput="updateScore(4, this.value)">
+      <div class="hint-row">
+        <span>Others' content frequently triggers feelings of inadequacy</span>
+        <span>Self-evaluation is largely internal and stable</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dimension 5 -->
+  <div class="dimension">
+    <div class="dim-header">
+      <div>
+        <div class="dim-number">Dimension 5</div>
+        <div class="dim-title">Digital Boundaries</div>
+      </div>
+      <div class="score-display" id="score-display-5">3</div>
+    </div>
+    <p class="dim-desc">Can you disconnect without distress? This dimension measures your capacity to maintain meaningful separation between digital and offline life.</p>
+    <div class="slider-wrap">
+      <div class="slider-labels"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+      <input type="range" min="1" max="5" value="3" step="1" id="slider-5" oninput="updateScore(5, this.value)">
+      <div class="hint-row">
+        <span>Device checked immediately before sleep and upon waking</span>
+        <span>Clear device-free periods maintained, sleep unaffected</span>
+      </div>
+    </div>
+  </div>
+
+  <button class="calculate-btn" onclick="calculate()">Calculate My Digital Wellbeing Score</button>
+
+  <!-- Result -->
+  <div class="result-card" id="result-card">
+    <div class="result-label">Your Digital Wellbeing Score</div>
+    <div class="result-score" id="result-score">3.0</div>
+    <div class="result-max">out of 5.0</div>
+    <div class="result-title" id="result-title"></div>
+    <div class="result-desc" id="result-desc"></div>
+    <div class="dim-breakdown" id="dim-breakdown"></div>
+    <button class="reset-btn" onclick="reset()">Reset and try again</button>
+  </div>
+
+  <p class="footer-note">
+    Based on the <a href="https://zenodo.org/records/20149107" target="_blank">Digital Wellbeing Index</a> framework by Recep Zerk, Digital Literacy Advocate.<br>
+    This tool is for reflective purposes only and does not constitute clinical assessment.
+  </p>
+
+</div>
+
+<script>
+  const scores = { 1: 3, 2: 3, 3: 3, 4: 3, 5: 3 };
+
+  const dimNames = ['Screen Quality', 'Algorithmic Dependency', 'Identity Coherence', 'Social Comparison Load', 'Digital Boundaries'];
+
+  function updateScore(dim, val) {
+    scores[dim] = parseInt(val);
+    document.getElementById('score-display-' + dim).textContent = val;
+
+    const slider = document.getElementById('slider-' + dim);
+    const pct = ((val - 1) / 4) * 100;
+    slider.style.background = `linear-gradient(to right, #1a1814 ${pct}%, #e0dcd5 ${pct}%)`;
+  }
+
+  // Init slider backgrounds
+  for (let i = 1; i <= 5; i++) {
+    updateScore(i, 3);
+  }
+
+  function calculate() {
+    const total = Object.values(scores).reduce((a, b) => a + b, 0);
+    const avg = (total / 5).toFixed(1);
+
+    let title, desc;
+
+    if (avg >= 4.0) {
+      title = 'Strong Digital Wellbeing';
+      desc = 'Your digital engagement appears largely self-directed and well-bounded. You show healthy patterns across most dimensions. Continue paying attention to any areas where you scored lower — even strong foundations benefit from ongoing awareness.';
+    } else if (avg >= 3.0) {
+      title = 'Mixed Patterns';
+      desc = 'Some dimensions are functioning well while others may warrant closer attention. This is the most common profile. Look at your lowest-scoring dimensions and consider what small, structural changes might shift those patterns over time.';
+    } else if (avg >= 2.0) {
+      title = 'Areas of Concern';
+      desc = 'Several dimensions show patterns associated with reduced wellbeing. This does not mean something is wrong with you — it reflects the environments you inhabit and the habits they have shaped. Small, deliberate changes in one dimension often have a ripple effect on others.';
+    } else {
+      title = 'Significant Imbalance';
+      desc = 'Consistent patterns across multiple dimensions suggest a meaningful gap between your digital engagement and your wellbeing. The research is clear that these patterns can shift with awareness and intentional change. Consider which single dimension feels most urgent to address first.';
+    }
+
+    document.getElementById('result-score').textContent = avg;
+    document.getElementById('result-title').textContent = title;
+    document.getElementById('result-desc').textContent = desc;
+
+    const breakdown = document.getElementById('dim-breakdown');
+    breakdown.innerHTML = '';
+    for (let i = 1; i <= 5; i++) {
+      const pill = document.createElement('div');
+      pill.className = 'dim-pill';
+      pill.innerHTML = `<div class="pill-score">${scores[i]}</div><div class="pill-name">${dimNames[i-1]}</div>`;
+      breakdown.appendChild(pill);
+    }
+
+    const card = document.getElementById('result-card');
+    card.classList.remove('visible');
+    void card.offsetWidth;
+    card.classList.add('visible');
+
+    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function reset() {
+    for (let i = 1; i <= 5; i++) {
+      document.getElementById('slider-' + i).value = 3;
+      updateScore(i, 3);
+    }
+    document.getElementById('result-card').classList.remove('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
