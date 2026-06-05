@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recep Zerk — Digital Literacy Advocate & Ultramarathon Runner</title>
+<meta name="description" content="Interactive tools on digital literacy, digital wellbeing, and running by Recep Zerk, Digital Literacy Advocate and ultramarathon runner based in Bethesda, MD.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f5f2ed;
+    --dark: #1a1814;
+    --mid: #5a5650;
+    --light: #9a9590;
+    --border: #e0dcd5;
+    --surface: #ffffff;
+    --bg2: #edeae4;
+    --accent-green: #2d4a3e;
+    --accent-yellow: #F5DF4D;
+    --accent-grey: #939597;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--dark);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: #3d3830;
+    color: white;
+    padding: 4rem 2rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.03);
+  }
+
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: -40px;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.03);
+  }
+
+  .header-label {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 1.25rem;
+  }
+
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 6vw, 48px);
+    font-weight: 400;
+    line-height: 1.15;
+    margin-bottom: 0.75rem;
+    position: relative;
+  }
+
+  header p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.5);
+    max-width: 500px;
+    margin: 0 auto 2rem;
+    line-height: 1.65;
+  }
+
+  .header-links {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .header-links a {
+    font-size: 12px;
+    color: rgba(255,255,255,0.45);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    transition: color 0.2s;
+  }
+
+  .header-links a:hover { color: white; }
+
+  /* MAIN */
+  main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+  }
+
+  /* SECTION HEADER */
+  .section-head {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .section-head:first-child { margin-top: 0; }
+
+  .section-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .dot-green { background: var(--accent-green); }
+  .dot-run { background: #8b3a2a; }
+
+  .section-head h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--dark);
+  }
+
+  .section-divider {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* TOOL CARDS */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 0.5rem;
+  }
+
+  @media (max-width: 560px) {
+    .tools-grid { grid-template-columns: 1fr; }
+  }
+
+  .tool-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    text-decoration: none;
+    color: var(--dark);
+    display: block;
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tool-card:hover {
+    border-color: var(--dark);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.07);
+  }
+
+  .tool-card.featured {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .tool-icon {
+    font-size: 22px;
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+
+  .tool-card.featured .tool-icon {
+    margin-bottom: 0;
+    font-size: 28px;
+  }
+
+  .tool-tag {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--light);
+    margin-bottom: 0.4rem;
+  }
+
+  .tool-name {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 0.4rem;
+    line-height: 1.3;
+  }
+
+  .tool-desc {
+    font-size: 12.5px;
+    color: var(--mid);
+    line-height: 1.55;
+  }
+
+  .tool-arrow {
+    position: absolute;
+    bottom: 1.25rem;
+    right: 1.25rem;
+    font-size: 14px;
+    color: var(--light);
+    transition: color 0.2s, transform 0.2s;
+  }
+
+  .tool-card:hover .tool-arrow {
+    color: var(--dark);
+    transform: translate(2px, -2px);
+  }
+
+  /* RESEARCH SECTION */
+  .research-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .research-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    text-decoration: none;
+    color: var(--dark);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .research-item:hover {
+    border-color: var(--dark);
+    background: var(--bg2);
+  }
+
+  .research-item-left { flex: 1; }
+
+  .research-item-tag {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--light);
+    margin-bottom: 0.3rem;
+  }
+
+  .research-item-title {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  .research-item-arrow {
+    color: var(--light);
+    font-size: 14px;
+    flex-shrink: 0;
+    transition: color 0.2s;
+  }
+
+  .research-item:hover .research-item-arrow { color: var(--dark); }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark);
+    color: rgba(255,255,255,0.4);
+    text-align: center;
+    padding: 2rem;
+    font-size: 12px;
+    line-height: 1.7;
+  }
+
+  footer a {
+    color: rgba(255,255,255,0.5);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  footer a:hover { color: white; }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="header-label">Recep Zerk · Bethesda, MD</p>
+  <h1>Digital Literacy Advocate<br>& Ultramarathon Runner</h1>
+  <p>Independent researcher on algorithmic systems, online identity, and human agency. These are the tools I've built along the way.</p>
+  <div class="header-links">
+    <a href="https://recepzerk.com" target="_blank">recepzerk.com</a>
+    <a href="https://medium.com/@recepzerk" target="_blank">Medium</a>
+    <a href="https://www.linkedin.com/in/recepzerk" target="_blank">LinkedIn</a>
+    <a href="https://github.com/recepzerk" target="_blank">GitHub</a>
+    <a href="https://zenodo.org/records/20149107" target="_blank">Research</a>
+  </div>
+</header>
+
+<main>
+
+  <!-- DIGITAL LITERACY TOOLS -->
+  <div class="section-head">
+    <div class="section-dot dot-green"></div>
+    <h2>Digital Literacy Tools</h2>
+    <div class="section-divider"></div>
+  </div>
+
+  <div class="tools-grid">
+    <a href="https://recepzerk.github.io/digital-wellbeing-calculator" class="tool-card featured" target="_blank">
+      <div>
+        <span class="tool-tag">Research Tool</span>
+        <div class="tool-name">Digital Wellbeing Score Calculator</div>
+        <div class="tool-desc">Rate yourself across five dimensions and calculate your composite digital wellbeing score. Based on the Digital Wellbeing Index framework.</div>
+      </div>
+      <span class="tool-icon">📊</span>
+    </a>
+
+    <a href="https://recepzerk.github.io/digital-literacy-quiz" class="tool-card" target="_blank">
+      <span class="tool-icon">🧭</span>
+      <span class="tool-tag">Quiz</span>
+      <div class="tool-name">Digital Literacy Quiz</div>
+      <div class="tool-desc">15 questions. Find out if you're a Passenger, Navigator, or Pilot in the digital world.</div>
+      <span class="tool-arrow">↗</span>
+    </a>
+
+    <a href="https://recepzerk.github.io/digital-habits-quiz-kids" class="tool-card" target="_blank">
+      <span class="tool-icon">⭐</span>
+      <span class="tool-tag">Ages 9-12</span>
+      <div class="tool-name">Digital Habits Quiz for Kids</div>
+      <div class="tool-desc">A friendly quiz helping kids understand their screen time, gaming habits, and online safety.</div>
+      <span class="tool-arrow">↗</span>
+    </a>
+  </div>
+
+  <!-- RUNNING TOOLS -->
+  <div class="section-head">
+    <div class="section-dot dot-run"></div>
+    <h2>Running Tools</h2>
+    <div class="section-divider"></div>
+  </div>
+
+  <div class="tools-grid">
+    <a href="https://recepzerk.github.io/running-outfit-weather" class="tool-card" target="_blank">
+      <span class="tool-icon">🌤️</span>
+      <span class="tool-tag">Weather + Gear</span>
+      <div class="tool-name">Running Outfit Weather</div>
+      <div class="tool-desc">Real-time weather + wind chill + effort duration. Tells you exactly what to wear for your run.</div>
+      <span class="tool-arrow">↗</span>
+    </a>
+
+    <a href="https://recepzerk.github.io/pace-to-playlist" class="tool-card" target="_blank">
+      <span class="tool-icon">🎵</span>
+      <span class="tool-tag">Music + Pace</span>
+      <div class="tool-name">Pace to Playlist</div>
+      <div class="tool-desc">Enter your target pace. Get 10 songs matched to the right BPM for your effort.</div>
+      <span class="tool-arrow">↗</span>
+    </a>
+
+    <a href="https://recepzerk.github.io/name-your-run" class="tool-card" target="_blank">
+      <span class="tool-icon">✍️</span>
+      <span class="tool-tag">Strava + Instagram</span>
+      <div class="tool-name">Name Your Run</div>
+      <div class="tool-desc">Generate a unique name and motivational line for your run based on city, weather, pace, and mood.</div>
+      <span class="tool-arrow">↗</span>
+    </a>
+  </div>
+
+  <!-- RESEARCH -->
+  <div class="section-head">
+    <div class="section-dot" style="background: var(--light);"></div>
+    <h2>Research Reports</h2>
+    <div class="section-divider"></div>
+  </div>
+
+  <div class="research-list">
+    <a href="https://zenodo.org/records/20149107" class="research-item" target="_blank">
+      <div class="research-item-left">
+        <div class="research-item-tag">Zenodo · 2026</div>
+        <div class="research-item-title">The Digital Wellbeing Index</div>
+      </div>
+      <span class="research-item-arrow">↗</span>
+    </a>
+    <a href="https://www.slideshare.net/slideshow/the-algorithmic-cage-report-2026-the-state-of-human-agency-in-a-predictive-world/286501382" class="research-item" target="_blank">
+      <div class="research-item-left">
+        <div class="research-item-tag">SlideShare · 2026</div>
+        <div class="research-item-title">The Algorithmic Cage</div>
+      </div>
+      <span class="research-item-arrow">↗</span>
+    </a>
+    <a href="https://www.slideshare.net/slideshow/digital-identity-drift-how-online-profiles-reshape-real-life-identity-and-well-being-by-recep-zerk/287276029" class="research-item" target="_blank">
+      <div class="research-item-left">
+        <div class="research-item-tag">SlideShare · 2026</div>
+        <div class="research-item-title">Digital Identity Drift</div>
+      </div>
+      <span class="research-item-arrow">↗</span>
+    </a>
+    <a href="https://www.slideshare.net/slideshow/how-brands-gain-visibility-and-recommendations-in-the-ai-driven-discovery-era-by-2026/286665061" class="research-item" target="_blank">
+      <div class="research-item-left">
+        <div class="research-item-tag">SlideShare · 2026</div>
+        <div class="research-item-title">AI Visibility Report</div>
+      </div>
+      <span class="research-item-arrow">↗</span>
+    </a>
+  </div>
+
+</main>
+
+<footer>
+  Recep Zerk · Digital Literacy Advocate · Bethesda, MD<br>
+  <a href="https://recepzerk.com" target="_blank">recepzerk.com</a> &nbsp;·&nbsp;
+  <a href="https://medium.com/@recepzerk" target="_blank">Medium</a> &nbsp;·&nbsp;
+  <a href="https://www.linkedin.com/in/recepzerk" target="_blank">LinkedIn</a> &nbsp;·&nbsp;
+  <a href="https://zenodo.org/records/20149107" target="_blank">Zenodo</a>
+</footer>
+
+</body>
+</html>
