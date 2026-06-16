@@ -2,6 +2,8 @@
 
 A hub for interactive tools built by Recep Zerk, Digital Literacy Advocate and ultramarathon runner.
 
+🔗 **[Visit the tools hub](https://recepzerk.github.io)**
+
 ## What's here
 
 **Digital Literacy Tools** — Self-assessment quizzes and calculators on digital wellbeing, algorithm awareness, and screen habits. Based on independent research published on Zenodo.
